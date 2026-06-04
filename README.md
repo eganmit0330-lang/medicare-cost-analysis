@@ -88,7 +88,7 @@ For a hypothetical state health department or healthcare consultancy:
 
 ## Visualizations
 
-[Link to Tableau Public Dashboard](#) *(replace with your link once published)*
+(https://public.tableau.com/app/profile/mitchell.egan/viz/MedicareCostandQualityAnalysis/Dashboard1)
 
 The dashboard tells the story in four sheets:
 1. **Cost vs Quality scatter plot** — the headline finding visualized
