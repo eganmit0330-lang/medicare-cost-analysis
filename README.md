@@ -126,4 +126,4 @@ medicare-cost-analysis/
 
 Built by Mitch Egan — transitioning from cancer research at Fred Hutchinson Cancer Center into data analytics.
 
-[LinkedIn](#) · [GitHub](#) · [Tableau Public](https://public.tableau.com/app/profile/mitchell.egan/viz/MedicareCostandQualityAnalysis/Dashboard1)
+[LinkedIn](https://www.linkedin.com/in/mitchegan/) · [GitHub](https://github.com/eganmit0330-lang) · [Tableau Public](https://public.tableau.com/app/profile/mitchell.egan/viz/MedicareCostandQualityAnalysis/Dashboard1)
