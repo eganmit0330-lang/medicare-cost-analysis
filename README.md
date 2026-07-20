@@ -117,7 +117,7 @@ medicare-cost-analysis/
 ## What This Project Shows About How I Work
 
 - **I verify before I publish.** When early results suggested hospital supply drove patient costs, I tested the claim against all 50 states before including it, and the full data pointed to state policy instead. When another query showed impossible 40-to-1 ratios, I traced it to a many-to-many join silently multiplying rows, fixed the method, and pivoted when the data still wasn't comparable.
-- **I know this domain.** Four years of research at Fred Hutchinson Cancer Center means I understand reserch data sets in the life sciences
+- **I know this domain.** Five years of research at Fred Hutchinson Cancer Center means I understand reserch data sets in the life sciences
 - **I write for humans.** Every finding here is one paragraph a non-analyst can read.
 
 ---
