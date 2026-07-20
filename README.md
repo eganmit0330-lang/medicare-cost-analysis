@@ -1,100 +1,90 @@
 # Medicare Cost Analysis: Do Patients Get What They Pay For?
 
-> **Investigating whether Medicare patients pay more at hospitals that deliver better care — and where the system is broken.**
+> **I analyzed 200,000+ Medicare hospital bills to answer one question: if you pay more, do you get better care? The answer is no — and sometimes it's the opposite.**
 
 ---
 
-## Executive Summary
+## The Three Findings That Matter Most
 
-This analysis examines 200,000+ Medicare billing records across 5,000+ U.S. hospitals to answer a question patients can't easily answer themselves: *does paying more get you better care?*
+**1. The worst hospitals charge the most.**
+Patients at 1-star hospitals pay an average of $14,474 per stay. At 5-star hospitals: $13,111. As quality goes up, cost goes down. "You get what you pay for" is not true in American hospitals.
 
-**The short answer: no — and in many cases, it's the opposite.**
+**2. A few hospitals charge 8-10x what everyone else charges — for the same procedures.**
+Orlando Health billed over $1 million for a treatment that averages $101,847 nationally. Two hospital systems — CarePoint Health (NJ) and Stanford Health Care (CA) — show up again and again charging 8x+ across completely unrelated procedures. That's not case complexity. That's a pattern.
 
-### Three findings that matter
-
-1. **1-star hospitals are 31% more expensive than 5-star hospitals.** Patients at the lowest-rated facilities pay an average of $14,474 per inpatient stay vs $13,111 at top-rated hospitals — for comparable procedures.
-
-2. **A handful of hospitals charge 8-10x the national average for routine procedures.** Orlando Health billed $1,052,088 for coagulation disorder treatment — 10.3x the national average. CarePoint Health (NJ) and Stanford Health Care (CA) appear repeatedly as systematic outliers.
-
-3. **Patients in low-supply markets pay double the national average out of pocket.** DC patients pay $4,346 per hospital stay vs $2,000–$3,000 in larger markets — driven by limited provider competition.
-
-### So what?
-
-These findings have direct implications for **state health departments, payers, and patients evaluating care options**. Each finding maps to a specific next investigation, detailed in the findings document.
+**3. What patients pay is decided by state policy, not by the hospital's bill.**
+DC patients pay 23% of their hospital's total cost — $4,346 per stay, the highest in the country. Maryland patients pay just 9% — $1,481, nearly the lowest — even though Maryland hospitals are among the most expensive in America. The difference? Maryland is the only state that sets hospital rates itself. Where you live decides what you owe.
 
 ---
 
-## The Business Question
+## The Data
 
-Healthcare consulting firms, state regulators, and health insurers face a recurring question: where is Medicare money being spent inefficiently, and how can patients and policymakers identify it?
+**Source:** CMS Medicare Provider Utilization and Payment Data (2015), via `bigquery-public-data.cms_medicare`
 
-This analysis treats that question as an analyst at a healthcare consultancy would: by examining the public CMS Medicare dataset to find cost variation, identify outliers, and test whether higher cost correlates with better quality.
+| Table | What it holds | Rows |
+|---|---|---|
+| Inpatient charges | One row per hospital per procedure type | 201,876 |
+| Outpatient charges | Same, for same-day visits | 32,532 |
+| Hospital info | Ownership, location, 1-5 star quality rating | 5,336 |
 
----
+**Three numbers appear throughout, and they are not the same thing:**
+- **Covered charges** = the sticker price. Nobody pays this. It's a negotiation opener.
+- **Total payments** = what the hospital actually collects, from all sources combined.
+- **Medicare payments** = the government's share of that.
+- **What the patient owes** = total payments minus Medicare payments.
 
-## Methodology
-
-**Data Source:** CMS Medicare Provider Utilization and Payment Data (2015), accessed via `bigquery-public-data.cms_medicare`
-
-**Scope:**
-- 201,876 inpatient billing records (DRG-level)
-- 32,532 outpatient billing records (APC-level)
-- 5,336 hospital metadata records (ownership, type, quality ratings)
-
-**Tools:** BigQuery (SQL), Tableau Public (dashboard), GitHub (documentation)
-
-**Approach:** Seven analytical queries answering progressively deeper questions — starting with where costs vary by state, then who charges more, whether quality justifies cost, which hospitals are outliers, and what patients actually pay out of pocket.
+**Tools:** BigQuery (SQL), Tableau Public, GitHub
 
 ---
 
-## Key Findings
+## All Eight Findings
 
-### 1. Geographic cost variation is driven by hospital supply, not sticker price
-California has the highest average sticker price ($97,692) but ranks only 6th in patient out-of-pocket cost. Alaska and DC — with 8 and 7 hospitals respectively — have the highest actual patient costs. **Limited provider competition predicts higher real prices.**
+### 1. Sticker prices and real prices live in different worlds
+California has the highest sticker prices in America ($97,692 average) — but ranks 21st in what patients actually pay. The number on the bill and the number that leaves your bank account are almost unrelated.
 
-### 2. For-profit hospitals charge more, but collect average
-Proprietary hospitals bill $66,548 on average — 34% above nonprofit hospitals — yet collect $11,059, comparable to nonprofits. The billing-payment gap is largest at for-profit facilities, suggesting aggressive billing strategy rather than higher cost of care.
+### 2. For-profit hospitals bill big and collect small
+For-profit hospitals put $66,548 on the average bill — 34% more than nonprofits. But they collect roughly the same ($11K vs $13K). The giant bill is a negotiating tactic, not a real price.
 
-### 3. The cost-quality inversion (headline finding)
-1-star hospitals charge an average of $63,094 in covered charges and collect $14,474 in total payments. 5-star hospitals charge $48,393 and collect $13,111. **The worst hospitals cost the most.** Hypotheses:
-- Ratings may partially reflect patient dissatisfaction with cost
-- Low-rated hospitals may cluster in underserved areas with limited competition
-- Either way, "paying more for better care" is not supported by the data
+### 3. The worst hospitals cost the most (the headline)
+Cost falls as quality rises, almost in a straight line. Two possible reasons: patients who get big bills rate hospitals worse on the satisfaction surveys that feed the star ratings (bills and surveys can arrive in the same window after discharge) — or low-rated hospitals sit in areas where they face little pressure to improve. Either way, price is not a signal of quality in this data.
 
-### 4. Systematic outliers exist and are nameable
-Two providers — CarePoint Health (NJ) and Stanford Health Care (CA) — appear repeatedly among hospitals charging 8x+ the national average across multiple procedure categories. This isn't a one-off; it's a pattern that warrants regulatory attention.
+### 4. The outliers have names
+CarePoint Health (NJ) and Stanford Health Care (CA) appear repeatedly at 8-10x the national average — across unrelated, often routine procedures. Stanford treats complex cases, which explains some markup. But basic cellulitis treatment shouldn't cost 8x the national average because a hospital also does transplants. The breadth across routine procedures points to pricing strategy, not just hard cases.
 
-### 5. Markup behavior varies dramatically by state
-Nevada hospitals bill 6.4x what they collect — the highest ratio in the country. New Jersey is second at 6.2x. States with the highest markups also have higher actual patient costs, suggesting markup correlates with patient-paid prices despite the negotiation gap.
+### 5. Some states' hospitals bill 6x what they collect
+Nevada hospitals bill 6.4 times what they're actually paid — the biggest gap in the country. New Jersey: 6.2x. Florida: 5.9x. The bigger the gap, the more aggressive the billing culture.
 
-### 6. Patient out-of-pocket cost is concentrated in low-supply markets
-DC patients pay $4,346 out of pocket per inpatient stay — nearly double the next-highest state. The top 5 most expensive states for patients are a mix of small markets (DC, HI, DE) and large states (NY, PA), suggesting both competition and state-level factors drive cost burden.
+### 6. What patients owe is a policy outcome, not a market outcome
+The patient's share of the bill ranges from 9% in Maryland — the only state that sets hospital rates itself — to 23% in DC. Hospital supply doesn't explain it: Montana has just 13 hospitals and the cheapest patient costs in America, while DC's 7 hospitals are the most expensive for patients. Two patients with the same $16K hospital stay can owe $1,500 or $4,300 depending on the state line between them.
+
+### 7. Some states are packed with for-profit hospitals
+Half of Nevada's hospitals are for-profit — the highest share in the country. Florida (40%) and Texas (36%) follow. These are the same states with the biggest billing markups. The kind of hospitals a state has shapes how aggressively its hospitals bill.
+
+### 8. But the billing aggression never reaches the patient
+Here's the twist: states full of for-profit hospitals bill harder, but their patients don't pay more. Florida has the 2nd-most for-profit hospitals and some of the LOWEST patient costs ($1,669). Why? Medicare decides what patients owe using its own rate schedule, it ignores the hospital's bill entirely. The sticker-price fight happens between hospitals and insurers. The patient was never in the room.
 
 ---
 
-## Recommendations
+## What I'd Tell a State Health Department
 
-For a hypothetical state health department or healthcare consultancy:
-
-| Finding | Recommended Action |
+| Finding | What to do about it |
 |---|---|
-| For-profit billing markup | Audit billing practices at proprietary hospitals; investigate billing-to-payment ratio as a regulatory signal |
-| Cost-quality inversion | Investigate confounding variables (geography, case mix) before drawing causal conclusions; flag 1-star hospitals for quality intervention |
-| Systematic outliers | Initiate formal review of CarePoint Health and Stanford Health Care billing practices |
-| Low-supply state pricing | Cross-reference with hospitals-per-capita data to test the competition hypothesis |
-| Patient out-of-pocket burden | Provide cost transparency tools to patients in DC, Alaska, Hawaii markets |
+| Hospitals billing 8-10x average | Audit these specific hospitals first — investigator time is scarce, start where the signal is loudest |
+| Worst hospitals cost most | Check whether geography and case mix explain it before assuming bad care causes high prices |
+| Patient share varies 9%-23% by state | Study Maryland's rate-setting model — it produced near-lowest patient costs despite high total costs |
+| Billing markup varies 2x-6x by state | Use the billing-to-payment ratio as an audit flag — a hospital asking 6x deserves more scrutiny than one asking 3x |
 
 ---
 
-## Visualizations
+## The Dashboard
 
-(https://public.tableau.com/app/profile/mitchell.egan/viz/MedicareCostandQualityAnalysis/Dashboard1)
+**[Interactive Tableau Dashboard →](https://public.tableau.com/app/profile/mitchell.egan/viz/MedicareCostandQualityAnalysis/Dashboard1)**
 
-The dashboard tells the story in four sheets:
-1. **Cost vs Quality scatter plot** — the headline finding visualized
-2. **Patient out-of-pocket heatmap** — geographic burden by state
-3. **Ownership type comparison** — for-profit billing behavior
-4. **Outlier hospitals table** — named hospitals charging 3x+ national average
+Four charts, one story:
+1. **Cost vs quality scatter** — the headline finding in one picture
+2. **Patient cost heatmap** — where in America patients pay most
+3. **Ownership comparison** — for-profit billing behavior
+4. **The outlier table** — hospitals charging 6x+, by name
 
 ---
 
@@ -110,7 +100,9 @@ medicare-cost-analysis/
 │   ├── 04_cost_vs_quality.sql
 │   ├── 05_outlier_hospitals.sql
 │   ├── 06_billing_markup_by_state.sql
-│   └── 07_patient_out_of_pocket.sql
+│   ├── 07_patient_out_of_pocket.sql
+│   ├── 08_ownership_mix_by_state.sql
+│   └── 09_ownership_vs_cost.sql
 ├── data/
 │   └── data_dictionary.md
 ├── findings/
@@ -122,20 +114,16 @@ medicare-cost-analysis/
 
 ---
 
-## What This Project Demonstrates
+## What This Project Shows About How I Work
 
-- **Multi-table SQL analysis** — joins across inpatient, outpatient, and hospital metadata tables
-- **Window functions** — benchmarking against national and regional averages
-- **Data quality instincts** — caught and corrected a many-to-many join that inflated initial results; pivoted analysis to use comparable metrics
-- **Domain expertise** — interpretation grounded in healthcare reimbursement structure (covered charges vs total payments vs Medicare payments)
-- **Business communication** — every finding paired with specific recommendations, not raw observations
+- **I verify before I publish.** When early results suggested hospital supply drove patient costs, I tested the claim against all 50 states before including it, and the full data pointed to state policy instead. When another query showed impossible 40-to-1 ratios, I traced it to a many-to-many join silently multiplying rows, fixed the method, and pivoted when the data still wasn't comparable.
+- **I know this domain.** Four years of research at Fred Hutchinson Cancer Center means I understand reserch data sets in the life sciences
+- **I write for humans.** Every finding here is one paragraph a non-analyst can read.
 
 ---
 
 ## About
 
-Built by Mitch Egan, transitioning from cancer research at Fred Hutchinson Cancer Center to data analytics. Clinical research background informs interpretation of healthcare data quality and reimbursement structures.
+Built by Mitch Egan — transitioning from cancer research at Fred Hutchinson Cancer Center into data analytics.
 
-- [LinkedIn](#)
-- [GitHub Portfolio](#)
-- [Tableau Public](#)
+[LinkedIn](#) · [GitHub](#) · [Tableau Public](https://public.tableau.com/app/profile/mitchell.egan/viz/MedicareCostandQualityAnalysis/Dashboard1)
